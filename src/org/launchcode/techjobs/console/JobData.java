@@ -19,7 +19,7 @@ public class JobData {
     private static final String DATA_FILE = "resources/job_data.csv";
     private static Boolean isDataLoaded = false;
 
-    private static ArrayList<HashMap<String, String>> allJobs;
+    private static ArrayList<HashMap<String, String>> allJobs; //Is this simply declaring allJobs is an array list of hash maps?
 
     /**
      * Fetch list of all values from loaded data,
@@ -57,22 +57,23 @@ public class JobData {
     /**
      * Returns results of search the jobs data by key/value, using
      * inclusion of the search term.
-     *
+     * <p>
      * For example, searching for employer "Enterprise" will include results
      * with "Enterprise Holdings, Inc".
      *
-     * @param column   Column that should be searched.
-     * @param value Value of teh field to search for
+     * @param column Column that should be searched.
+     * @param value  Value of the field to search for
      * @return List of all jobs matching the criteria
      */
     public static ArrayList<HashMap<String, String>> findByColumnAndValue(String column, String value) {
-
+        //we assign the name of the column when we run the function //
+        //^^first part defines what type we will be returning^^//
         // load data, if not already loaded
         loadData();
 
-        ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
+        ArrayList<HashMap<String, String>> jobs = new ArrayList<>(); //we are creating an empty array list to add hash maps to//
 
-        for (HashMap<String, String> row : allJobs) {
+        for (HashMap<String, String> row : allJobs) { //for a particular entity in all entities -- for this in these. A HashMap is a name-value pair. An array list //
 
             String aValue = row.get(column);
 
@@ -80,14 +81,13 @@ public class JobData {
                 jobs.add(row);
             }
         }
-
         return jobs;
     }
 
     /**
      * Read in data from a CSV file and store it in a list
      */
-    private static void loadData() {
+    public static void loadData() {
 
         // Only load data once
         if (isDataLoaded) {
@@ -125,4 +125,26 @@ public class JobData {
         }
     }
 
+    public static ArrayList<HashMap<String, String>> findByValue(String value) { //we're not searching for column, therefore we don't have to pass it as an argument //
+        //if the user selects all //
+        loadData();
+
+        ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
+
+        for (HashMap<String, String> row : allJobs) { //A HashMap can contain any number of key-value pairs, for example
+            // one row is: (name: Natalie, location: St. Louis, job: Student, employer: Self-employed) in ALL ROWS like this //
+            //if the term appears once in a row, print that row but then go to searching the next row -- don't repeatedly print the same row //
+            //for a particular entity in all entities -- for this in these.//
+                for (String key : row.keySet()) { //key is an arbitrary name we assigned //
+                    String aValue = row.get(key);
+                    if (!jobs.contains(row)) {
+                        if (aValue.toUpperCase().indexOf(value.toUpperCase()) != -1) { //not the same as contains//
+                            jobs.add(row);
+                        }
+                    }
+                }
+        }
+        return jobs;
+    }
 }
+//look for if the row is already in our array list of hash maps

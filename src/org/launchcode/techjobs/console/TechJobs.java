@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
+import static org.launchcode.techjobs.console.JobData.loadData;
+
 /**
  * Created by LaunchCode
  */
+
 public class TechJobs {
 
     private static Scanner in = new Scanner(System.in);
@@ -15,7 +18,7 @@ public class TechJobs {
 
         // Initialize our field map with key/name pairs
         HashMap<String, String> columnChoices = new HashMap<>();
-        columnChoices.put("core competency", "Skill");
+        columnChoices.put("core competency", "Skill"); //This adds a row for core competency/skill
         columnChoices.put("employer", "Employer");
         columnChoices.put("location", "Location");
         columnChoices.put("position type", "Position Type");
@@ -31,13 +34,13 @@ public class TechJobs {
         // Allow the user to search until they manually quit
         while (true) {
 
-            String actionChoice = getUserSelection("View jobs by:", actionChoices);
+            String actionChoice = getUserSelection("View jobs by:", actionChoices); //the menuHeader is equal to "view jobs by")
 
-            if (actionChoice.equals("list")) {
+            if (actionChoice.equals("list")) { //if the user chooses list, give them the column choices devoted to list //
 
                 String columnChoice = getUserSelection("List", columnChoices);
 
-                if (columnChoice.equals("all")) {
+                if (columnChoice.equals("all")) { //if the user chooses to list all of the job data//
                     printJobs(JobData.findAll());
                 } else {
 
@@ -51,7 +54,7 @@ public class TechJobs {
                     }
                 }
 
-            } else { // choice is "search"
+            } else { // choice is "search" //If the user chooses search //
 
                 // How does the user want to search (e.g. by skill or employer)
                 String searchField = getUserSelection("Search by:", columnChoices);
@@ -61,7 +64,7 @@ public class TechJobs {
                 String searchTerm = in.nextLine();
 
                 if (searchField.equals("all")) {
-                    System.out.println("Search all fields not yet implemented.");
+                    printJobs(JobData.findByValue(searchTerm)); //place method call for findbyValue here //
                 } else {
                     printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
                 }
@@ -70,7 +73,7 @@ public class TechJobs {
     }
 
     // ﻿Returns the key of the selected item from the choices Dictionary
-    private static String getUserSelection(String menuHeader, HashMap<String, String> choices) {
+    private static String getUserSelection(String menuHeader, HashMap<String, String> choices) { //we're creating a method called getUserSelection//
 
         Integer choiceIdx;
         Boolean validChoice = false;
@@ -109,8 +112,23 @@ public class TechJobs {
     }
 
     // Print a list of jobs
-    private static void printJobs(ArrayList<HashMap<String, String>> someJobs) {
-
-        System.out.println("printJobs is not implemented yet");
+    //To Do//
+    //1) Create an array list of hash maps. Each hash map is a job with location, description, etc.
+    private static void printJobs(ArrayList<HashMap<String, String>> someJobs) { //someJobs is the name of our array list of hashmaps that we have given//
+        // We don't want to iterate over each column as it is given (employer, location, type of job) because if a new column is added for each job, we'll have to update this code as well//
+        //How are "search" and "list" any different?
+        //A hashmap can contain any number of key-value pairs, but each key can only have one value. Think of a dictionary in python.//
+        if(!someJobs.isEmpty()){
+        for (HashMap<String, String> entry : someJobs) { //the colon means "in". We can name "entry" whatever we want
+            System.out.println("****");
+            for (String key : entry.keySet()) {
+                String value = entry.get(key);
+                System.out.println(key + ": " + value);
+                }
+            }
+        }
+        else {
+            System.out.println("Sorry, we can't find that term");
+        }
     }
 }
